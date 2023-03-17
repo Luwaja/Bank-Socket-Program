@@ -1,5 +1,4 @@
 #Name: Luke James
-#ID: 010930803
 
 # Import statements
 import binascii
