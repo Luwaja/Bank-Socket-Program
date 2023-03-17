@@ -25,10 +25,6 @@ serverSocket.listen(1) # Listener begins listening
 print('The server is ready to receive')
 print('')
 
-# Prepare to unpack data from client
-##unpacker = struct.Struct('I 2s f')
-
-
 # APPLICATION ========================================================================================
 # While loop loops indefinitely for client connections
 while True:
@@ -45,61 +41,36 @@ while True:
         
             # Check balance
             if command.startswith('a'):
-                print('A!')
-                response = f'Balance: ${balance}'
+                response = f'====================\nYour balance is: ${balance}\n====================\n'
             
             # Withdraw
             elif command.startswith('b'):
-                print('B!')
                 amount = float(command.split()[1])
-                if amount <= balance:
+                if amount < 0:
+                    response = '====================\nThat is not a valid number.\n====================\n'
+                elif amount <= balance:
                     balance -= amount
-                    response = f'Withdrawn: ${amount}'
+                    response = f'====================\nYou withdrew: ${amount}\n====================\n'
                 else:
-                    response = 'Insufficient Funds'
+                    response = '====================\nYou dont have enough money.\n====================\n'
             
             # Deposit
             elif command.startswith('c'):
-                print('C!')
                 amount = float(command.split()[1])
                 balance += amount
-                response = f'Deposited: ${amount}'
+                response = f'\n====================\nYou deposited: ${amount}\n====================\n'
             
             # Quit
             elif command.startswith('d'):
-                print('D!')
                 break
             else:
-                response = 'Invalid Request'
+                response = '====================\nInvalid Request\n====================\n'
 
             # Send response back to client
-            connectionSocket.send(response)
+            connectionSocket.send(response.encode())
 
         connectionSocket.close()
 
     except:
         print('crashed!')
         exit(1)
-    
-
-# EXAMPLE WORK ===================================================================
-# Print what we received in hex
-            # print('received "%s"' % binascii.hexlify(data))
-            # # Unpack the data back to what we need and print it # Note data is a tuple which is immutable in python (cannot change it)
-            # unpacked_data = unpacker.unpack(data)
-            # print('unpacked this from client')
-            # print(unpacked_data)
-            # print('')
-
-            # # Convert to variables from tuple to show how to modify
-            # print('Modifying data to send to client')
-            # a, b, c = unpacked_data
-            # a = a+1
-            # # Note in Python 3 you need to do the "b"
-            # b = b'cd'
-            # c = c-1
-            # # Put values in tuple and pack to send back to client
-            # values = (a, b, c)
-            # print(values)
-            # packer = struct.Struct('I 2s f')
-            # packed_data = packer.pack(*values)
