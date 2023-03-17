@@ -1,5 +1,4 @@
 Name: Luke James
-ID: 010930803
 
 Instructions:
 1. Launch the server.py file first using the command line with a command along the lines of "python server.py 25918".
